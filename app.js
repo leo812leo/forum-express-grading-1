@@ -1,6 +1,7 @@
 const express = require('express')
 const flash = require('connect-flash')
 const session = require('express-session')
+const passport = require('./config/passport')
 const app = express()
 const { engine } = require('express-handlebars')
 const db = require('./models') // 引入資料庫
@@ -9,6 +10,9 @@ const port = 3000
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
+// setup passport
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.engine('handlebars', engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars')
@@ -23,6 +27,6 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-require('./routes')(app)
+require('./routes')(app, passport)
 
 module.exports = app
