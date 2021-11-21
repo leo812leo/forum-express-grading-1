@@ -74,7 +74,7 @@ const adminController = {
     }
     const { file } = req
     if (file) {
-      fs.readFile(file.path, (err, data) => {
+      fs.readFile(file.path, (err) => {
         if (err) console.log('Error: ', err)
         fs.writeFile(`upload/${file.originalname}`, data, () => {
           return Restaurant.findByPk(req.params.id)
@@ -111,9 +111,6 @@ const adminController = {
         })
     }
   },
-
-
-
   deleteRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id)
       .then((restaurant) => {
