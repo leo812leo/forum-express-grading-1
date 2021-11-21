@@ -23,6 +23,8 @@ module.exports = (app, passport) => {
   // 連到 /admin 頁面就轉到 /admin/restaurants
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
   app.get('/admin/restaurants', authenticatedAdmin, adminController.getRestaurants)
+  app.get('/admin/restaurants/create', authenticatedAdmin, adminController.createRestaurant)
+  app.post('/admin/restaurants', authenticatedAdmin, adminController.postRestaurant)
 
   /* user */
   app.get('/signup', userController.signUpPage)
