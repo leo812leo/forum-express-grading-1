@@ -1,14 +1,26 @@
 const db = require('../models')
 const Restaurant = db.Restaurant
 const adminController = {
+  //getRestaurants
   getRestaurants: (req, res) => {
     return Restaurant.findAll({ raw: true }).then(restaurants => {
       return res.render('admin/restaurants', { restaurants: restaurants })
     })
   },
+  //getRestaurant
+  getRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id, { raw: true }).then(restaurant => {
+      return res.render('admin/restaurant', {
+        restaurant: restaurant
+      })
+    })
+  },
+  /* create */
+  // createPage
   createRestaurant: (req, res) => {
     return res.render('admin/create')
   },
+  // POST to create
   postRestaurant: (req, res) => {
     if (!req.body.name) {
       req.flash('error_messages', "name didn't exist")
