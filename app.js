@@ -8,6 +8,9 @@ const db = require('./models') // 引入資料庫
 const methodOverride = require('method-override')
 const port = process.env.PORT || 3000
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
