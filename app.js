@@ -5,11 +5,14 @@ const passport = require('./config/passport')
 const app = express()
 const { engine } = require('express-handlebars')
 const db = require('./models') // 引入資料庫
+const methodOverride = require('method-override')
 const port = 3000
+
 
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
+app.use(methodOverride('_method'))
 // setup passport
 app.use(passport.initialize())
 app.use(passport.session())
