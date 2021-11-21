@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
 app.use(methodOverride('_method'))
+app.use('/upload', express.static(__dirname + '/upload'))
 // setup passport
 app.use(passport.initialize())
 app.use(passport.session())
