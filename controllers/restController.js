@@ -11,6 +11,10 @@ const restController = {
       categoryName: r.Category.name
     }))
     return res.render('restaurants', { restaurants: data })
+  },
+  getRestaurant: async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.params.id, { include: Category })
+    return res.render('restaurant', { restaurant: restaurant.toJSON() })
   }
 }
 

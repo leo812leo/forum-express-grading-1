@@ -21,8 +21,6 @@ module.exports = (app, passport) => {
     }
     res.redirect('/signin')
   }
-  app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
-  app.get('/restaurants', authenticated, restController.getRestaurants)
 
   /* admin */
   // restaurants
@@ -48,6 +46,11 @@ module.exports = (app, passport) => {
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory) //delete categorie  (D)
 
   /* user */
+  // restaurants
+  app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
+  app.get('/restaurants', authenticated, restController.getRestaurants)
+  app.get('/restaurants/:id', authenticated, restController.getRestaurant)  //read Restaurant   (R)
+
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
   app.get('/signin', userController.signInPage)
