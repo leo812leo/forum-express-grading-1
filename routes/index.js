@@ -41,10 +41,11 @@ module.exports = (app, passport) => {
   app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)  //edit users   (U)
 
   // categories
-  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)         //read categories   (R)
-  app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)         //create categories (C)
+  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)         //categories page  
+  app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)         //create categorie  (C)
   app.get('/admin/categories/:id', authenticatedAdmin, categoryController.getCategories)     //read categorie    (R)
   app.put('/admin/categories/:id', authenticatedAdmin, categoryController.putCategory)       //edit categorie    (U)
+  app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory) //delete categorie  (D)
 
   /* user */
   app.get('/signup', userController.signUpPage)

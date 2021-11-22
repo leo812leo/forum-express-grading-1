@@ -46,5 +46,11 @@ let categoryController = {
         })
     }
   },
+  deleteCategory: async (req, res) => {
+
+    const category = await Category.findByPk(req.params.id)
+    await category.destroy()
+    res.redirect('/admin/categories')
+  }
 }
 module.exports = categoryController
