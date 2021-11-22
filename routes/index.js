@@ -42,7 +42,7 @@ module.exports = (app, passport) => {
 
   // categories
   app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)         //read categories  (R)
-
+  app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)         //edit categories  (U)
   /* user */
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
