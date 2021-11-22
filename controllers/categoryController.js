@@ -21,6 +21,30 @@ let categoryController = {
           res.redirect('/admin/categories')
         })
     }
-  }
+  },
+  getCategories: async (req, res) => {
+    const categories = await Category.findAll({
+      raw: true,
+      nest: true
+    })
+    if (req.params.id) {
+      const category = await Category.findByPk(req.params.id)
+      return res.render('admin/categories', { categories, category: category.toJSON() })
+    } else {
+      return res.render('admin/categories', { categories })
+    }
+  },
+  putCategory: (req, res) => {
+    if (!req.body.name) {
+      req.flash('error_messages', 'name didn\'t exist')
+      return res.redirect('back')
+    } else {
+      return Category.findByPk(req.params.id)
+        .then((category) => {
+          category.update(req.body)
+            .then(res.redirect('/admin/categories'))
+        })
+    }
+  },
 }
 module.exports = categoryController
