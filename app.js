@@ -22,7 +22,7 @@ app.use('/upload', express.static(__dirname + '/upload'))
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.engine('handlebars', engine({ defaultLayout: 'main' }));
+app.engine('handlebars', engine({ defaultLayout: 'main', helpers: require('./config/handlebars-helpers') }));
 app.set('view engine', 'handlebars')
 
 // 把 req.flash 放到 res.locals 裡面
