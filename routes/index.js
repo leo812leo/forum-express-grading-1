@@ -1,6 +1,8 @@
 const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
+const categoryController = require('../controllers/categoryController.js')
+
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 const helpers = require('../_helpers')
@@ -23,7 +25,7 @@ module.exports = (app, passport) => {
   app.get('/restaurants', authenticated, restController.getRestaurants)
 
   /* admin */
-  // 連到 /admin 頁面就轉到 /admin/restaurants
+  // restaurants
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
   app.get('/admin/restaurants', authenticatedAdmin, adminController.getRestaurants)
   app.get('/admin/restaurants/create', authenticatedAdmin, adminController.createRestaurant) //create page
@@ -34,9 +36,12 @@ module.exports = (app, passport) => {
   app.put('/admin/restaurants/:id', authenticatedAdmin
     , upload.single('image'), adminController.putRestaurant)                                 //edit Restaurant   (U)
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant) //delete Restaurant (D)
-  app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
-  app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)
+  // users
+  app.get('/admin/users', authenticatedAdmin, adminController.getUsers)                     //read users   (R)
+  app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)  //edit users   (U)
 
+  // categories
+  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)         //read categories  (R)
 
   /* user */
   app.get('/signup', userController.signUpPage)
