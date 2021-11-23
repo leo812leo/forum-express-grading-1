@@ -58,5 +58,6 @@ module.exports = (app, passport) => {
   app.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
   app.get('/logout', userController.logout)
   // comments
-  app.post('/comments', authenticated, commentController.postComment)
+  app.post('/comments', authenticated, commentController.postComment)             //create comment  (C)
+  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)//delete comment  (C)
 }
