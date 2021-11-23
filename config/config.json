@@ -6,9 +6,10 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
-  "test": {
+  "production": {
     "username": "root",
     "password": null,
+<<<<<<< HEAD
     "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "mysql"
@@ -22,6 +23,11 @@
         "rejectUnauthorized": false
       }
     }
+=======
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+>>>>>>> origin/R02-test
   },
     "travis": {
     "username": "travis",
