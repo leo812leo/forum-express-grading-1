@@ -17,8 +17,8 @@ describe('# R02', () => {
           .stub(helpers, 'ensureAuthenticated')
           .returns(true)
         this.getUser = sinon.stub(helpers, 'getUser').returns({ id: 1 })
-       // 製作假資料
-       // 本 context 會用這筆資料進行測試
+        // 製作假資料
+        // 本 context 會用這筆資料進行測試
         this.UserMock = createModelMock('User', {
           id: 1,
           email: 'root@example.com',
@@ -45,7 +45,7 @@ describe('# R02', () => {
         res.render.getCall(0).args[0].should.equal('profile')
         res.render.getCall(0).args[1].user.name.should.equal('admin')
       })
-      
+
       // 測試完畢，清除資料
       after(async () => {
         // 清除模擬驗證資料
@@ -126,7 +126,7 @@ describe('# R02', () => {
         const req = mockRequest({
           params: { id: 1 },
           body: { name: 'admin2', email: 'admin_test@gmail.com' },
-        }) 
+        })
         const res = mockResponse()
 
         // 測試作業指定的 userController.putUser 函式
@@ -134,7 +134,7 @@ describe('# R02', () => {
 
         // putUser 正確執行的話，應呼叫 req.flash 
         // req.flash 的參數應與下列字串一致
-        req.flash.calledWith('success_messages','使用者資料編輯成功').should.be.true
+        req.flash.calledWith('success_messages', '使用者資料編輯成功').should.be.true
         // putUser 執行完畢後，應呼叫 res.redirect 並重新導向 /users/1
         res.redirect.calledWith('/users/1').should.be.true
         // putUser 執行完畢後，id:1 使用者的 name 和 email 應該已被修改 
