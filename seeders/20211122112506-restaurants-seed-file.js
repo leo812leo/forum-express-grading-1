@@ -4,8 +4,9 @@ const faker = require('faker')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Restaurants',
-      Array.from({ length: 50 }).map(d =>
+      Array.from({ length: 50 }).map((item, index) =>
       ({
+        id: index * 10 + 1,
         name: faker.name.findName(),
         tel: faker.phone.phoneNumber(),
         address: faker.address.streetAddress(),
@@ -14,7 +15,7 @@ module.exports = {
         description: faker.lorem.text(),
         createdAt: new Date(),
         updatedAt: new Date(),
-        CategoryId: Math.floor(Math.random() * 6) * 10 + 1
+        CategoryId: Math.floor(Math.random() * 7) * 10 + 1
       })
       ), {})
   },

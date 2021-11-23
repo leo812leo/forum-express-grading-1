@@ -5,6 +5,9 @@ const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const helpers = require('../_helpers')
+const Restaurant = db.Restaurant
+const Comment = db.Comment
+const x = 0
 
 const userController = {
   signUpPage: (req, res) => {
@@ -34,7 +37,12 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: async (req, res) => {
-    const user = await User.findByPk(req.params.id)
+    const user = await User.findByPk(req.params.id, {
+      include: [
+        Comment,
+        { model: Comment, include: [Restaurant] }
+      ]
+    })
     return res.render('profile', { user: user.toJSON() })
   },
   // POST to create
