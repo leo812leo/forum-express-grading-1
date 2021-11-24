@@ -37,7 +37,8 @@ const restController = {
     const data = result.rows.map(r => ({
       ...r.dataValues,
       description: r.dataValues.description.substring(0, 50),
-      categoryName: r.Category.name
+      categoryName: r.Category.name,
+      isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(r.id)
     }))
     //categories
     const categories = await Category.findAll({ raw: true, nest: true })
@@ -84,6 +85,21 @@ const restController = {
   getDashBoard: async (req, res) => {
     const restaurant = await Restaurant.findByPk(req.params.id, { include: [Category, Comment] })
     return res.render('dashboard', { restaurant: restaurant.toJSON() })
+  },
+  getRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id, {
+      include: [
+        Category,
+        { model: User, as: 'FavoritedUsers' },  // 加入關聯資料
+        { model: Comment, include: [User] }
+      ]
+    }).then(restaurant => {
+      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id) // 找出收藏此餐廳的 user
+      return res.render('restaurant', {
+        restaurant: restaurant.toJSON(),
+        isFavorited: isFavorited  // 將資料傳到前端
+      })
+    })
   }
 
 }
