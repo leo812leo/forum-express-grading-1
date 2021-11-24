@@ -1,3 +1,4 @@
+const { CommandCompleteMessage } = require('pg-protocol/dist/messages')
 const db = require('../models')
 const Restaurant = db.Restaurant
 const Category = db.Category
@@ -59,6 +60,7 @@ const restController = {
           { model: Comment, include: [User] }
         ]
       })
+    await restaurant.update({ ...restaurant.dataValues, viewcount: restaurant.viewcount + 1 })
     return res.render('restaurant', { restaurant: restaurant.toJSON() })
   },
   getFeeds: async (req, res) => {
@@ -78,7 +80,12 @@ const restController = {
     })
     const [restaurants, comments] = await Promise.all([restaurantsPromise, commentsPromise])
     return res.render('feeds', { restaurants, comments })
+  },
+  getDashBoard: async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.params.id, { include: [Category, Comment] })
+    return res.render('dashboard', { restaurant: restaurant.toJSON() })
   }
+
 }
 
 module.exports = restController
