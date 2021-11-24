@@ -27,9 +27,9 @@ describe('# R04: Like / Unlike', function () {
       // 建立了一個模擬的 Like table，裡面目前是空的
       this.mockLikeData = []
       this.likeMock = createModelMock('Like', null, this.mockLikeData)
-      
+
       // 連向模擬的 Like table
-      this.userController = createControllerProxy('../controllers/userController', {Like: this.likeMock})
+      this.userController = createControllerProxy('../controllers/userController', { Like: this.likeMock })
     })
 
     it(' POST /like/:restaurantId ', async () => {
@@ -88,6 +88,7 @@ describe('# R04: Like / Unlike', function () {
       // 將模擬的 Like table 內的資料全數撈出
       const likes = await this.likeMock.findAll()
       // addLike 執行完畢後，Like table 應會從有 1 筆資料 -> 變成空的
+      console.log(likes)
       likes.should.have.lengthOf(0)
     })
 

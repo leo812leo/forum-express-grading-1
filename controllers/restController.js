@@ -4,6 +4,8 @@ const Restaurant = db.Restaurant
 const Category = db.Category
 const Comment = db.Comment
 const User = db.User
+const Like = db.Like
+
 const pageLimit = 10
 
 
@@ -38,7 +40,8 @@ const restController = {
       ...r.dataValues,
       description: r.dataValues.description.substring(0, 50),
       categoryName: r.Category.name,
-      isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(r.id)
+      isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(r.id),
+      isLiked: req.user.LikedRestaurants.map(d => d.id).includes(r.id)
     }))
     //categories
     const categories = await Category.findAll({ raw: true, nest: true })
@@ -58,11 +61,15 @@ const restController = {
       {
         include: [
           Category,
+          { model: User, as: 'FavoritedUsers' },
+          { model: User, as: 'LikedUsers' },
           { model: Comment, include: [User] }
         ]
       })
     await restaurant.update({ ...restaurant.dataValues, viewcount: restaurant.viewcount + 1 })
-    return res.render('restaurant', { restaurant: restaurant.toJSON() })
+    const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id)
+    const isLiked = restaurant.LikedUsers.map(d => d.id).includes(req.user.id)
+    return res.render('restaurant', { restaurant: restaurant.toJSON(), isFavorited, isLiked })
   },
   getFeeds: async (req, res) => {
     const restaurantsPromise = Restaurant.findAll({
@@ -86,22 +93,6 @@ const restController = {
     const restaurant = await Restaurant.findByPk(req.params.id, { include: [Category, Comment] })
     return res.render('dashboard', { restaurant: restaurant.toJSON() })
   },
-  getRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id, {
-      include: [
-        Category,
-        { model: User, as: 'FavoritedUsers' },  // 加入關聯資料
-        { model: Comment, include: [User] }
-      ]
-    }).then(restaurant => {
-      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id) // 找出收藏此餐廳的 user
-      return res.render('restaurant', {
-        restaurant: restaurant.toJSON(),
-        isFavorited: isFavorited  // 將資料傳到前端
-      })
-    })
-  }
-
 }
 
 module.exports = restController
