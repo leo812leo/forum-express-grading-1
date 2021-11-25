@@ -1,14 +1,11 @@
 const bcrypt = require('bcryptjs')
-const db = require('../models')
-const User = db.User
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const helpers = require('../_helpers')
-const Restaurant = db.Restaurant
-const Comment = db.Comment
-const Favorite = db.Favorite
-const Like = db.Like
+
+const db = require('../models')
+const { User, Restaurant, Comment, Favorite, Like, Followship } = db
 
 const userController = {
   signUpPage: (req, res) => {
@@ -149,15 +146,33 @@ const userController = {
         { model: User, as: 'Followers' }
       ]
     })
-    // 整理 users 資料
     users = users.map(user => ({
       ...user.dataValues,
       FollowerCount: user.Followers.length,
       isFollowed: req.user.Followings.map(d => d.id).includes(user.id)
     }))
-    // 依追蹤者人數排序清單
     users = users.sort((a, b) => b.FollowerCount - a.FollowerCount)
     return res.render('topUser', { users: users })
+  },
+  addFollowing: (req, res) => {
+    return Followship.create({
+      followerId: req.user.id,
+      followingId: req.params.userId
+    })
+      .then((followship) => {
+        return res.redirect('back')
+      })
+  },
+
+  removeFollowing: (req, res) => {
+    return Followship.destroy({
+      where: {
+        followerId: req.user.id,
+        followingId: req.params.userId
+      }
+    }).then((followship) => {
+      return res.redirect('back')
+    })
   }
 }
 
