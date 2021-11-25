@@ -144,7 +144,7 @@ const userController = {
       })
   },
   getTopUser: async (req, res) => {
-    const users = await User.findAll({
+    let users = await User.findAll({
       include: [
         { model: User, as: 'Followers' }
       ]

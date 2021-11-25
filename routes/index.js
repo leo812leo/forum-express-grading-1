@@ -69,6 +69,8 @@ module.exports = (app, passport) => {
   // comments
   app.post('/comments', authenticated, commentController.postComment)             //create comment  (C)
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)//delete comment  (D)
+  //TOP 10
+  app.get('/users/top', authenticated, userController.getTopUser)
   //Profile
   app.get('/users/:id', authenticated, userController.getUser)
   app.get('/users/:id/edit', authenticated, userController.editUser)
