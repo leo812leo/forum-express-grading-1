@@ -1,13 +1,9 @@
 const { CommandCompleteMessage } = require('pg-protocol/dist/messages')
 const db = require('../models')
-const Restaurant = db.Restaurant
-const Category = db.Category
-const Comment = db.Comment
-const User = db.User
-const Like = db.Like
-
+const { User, Restaurant, Comment, Favorite, Category } = db
 const pageLimit = 10
-
+const Sequelize = require('sequelize')
+const helpers = require('../_helpers')
 
 const restController = {
   getRestaurants: async (req, res) => {
@@ -92,6 +88,20 @@ const restController = {
   getDashBoard: async (req, res) => {
     const restaurant = await Restaurant.findByPk(req.params.id, { include: [Category, Comment] })
     return res.render('dashboard', { restaurant: restaurant.toJSON() })
+  },
+  getTopRestaurant: async (req, res) => {
+    let restaurants = await Restaurant.findAll({
+      include: [{ model: User, as: 'FavoritedUsers' }],
+      nest: true,
+    })
+    restaurants = restaurants.map(r => ({
+      ...r.dataValues,
+      favoritedCount: r.dataValues.FavoritedUsers.length,
+      isFavorited: helpers
+        .getUser(req).FavoritedRestaurants.map(d => d.id).includes(r.id)
+    }))
+    restaurants = restaurants.sort((a, b) => b.favoritedCount - a.favoritedCount).slice(0, 10)
+    return res.render('topResurant', { restaurants })
   },
 }
 

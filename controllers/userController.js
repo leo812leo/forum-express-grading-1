@@ -97,6 +97,9 @@ const userController = {
     }
   },
   addFavorite: (req, res) => {
+    // console.log("============addFavorite=========")
+    // console.log("req", req)
+    // console.log("helpers.getUser(req)", helpers.getUser(req))
     return Favorite.create({
       UserId: helpers.getUser(req).id,
       RestaurantId: req.params.restaurantId
@@ -106,18 +109,17 @@ const userController = {
       })
   },
   removeFavorite: (req, res) => {
-    return Favorite.findOne({
+    // console.log("============removeFavorite=========")
+    // console.log("req", req)
+    // console.log("helpers.getUser(req)", helpers.getUser(req))
+    return Favorite.destroy({
       where: {
-        UserId: helpers.getUser(req).id,
+        UserId: req.user.id,
         RestaurantId: req.params.restaurantId
       }
+    }).then(() => {
+      return res.redirect('back')
     })
-      .then((favorite) => {
-        favorite.destroy()
-          .then(() => {
-            return res.redirect('back')
-          })
-      })
   },
   addLike: (req, res) => {
     return Like.create({
