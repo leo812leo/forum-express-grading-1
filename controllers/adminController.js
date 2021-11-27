@@ -1,13 +1,14 @@
+/* DB */
 const db = require('../models')
-const Restaurant = db.Restaurant
-const User = db.User
-const fs = require('fs')
+const { User, Restaurant, Category } = db
+/* PACKAGE */
+// IMGUR
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
-const Category = db.Category
+// fs
+const fs = require('fs')
 
 const adminController = {
-  //getRestaurants
   getRestaurants: (req, res) => {
     return Restaurant.findAll({
       raw: true,
@@ -17,7 +18,6 @@ const adminController = {
       return res.render('admin/restaurants', { restaurants })
     })
   },
-  //getRestaurant
   getRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id, {
       include: [Category]
@@ -27,8 +27,6 @@ const adminController = {
       })
     })
   },
-  /* create */
-  // createPage
   createRestaurant: (req, res) => {
     Category.findAll({
       raw: true,
@@ -37,7 +35,6 @@ const adminController = {
       return res.render('admin/create', { categories })
     })
   },
-  // POST to create
   postRestaurant: (req, res) => {
     if (!req.body.name) {
       req.flash('error_messages', "name didn't exist")

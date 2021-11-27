@@ -35,15 +35,19 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: async (req, res) => {
-    const user = await User.findByPk(req.params.id, {
+    let user = await User.findByPk(req.params.id, {
       include: [
         Comment,
-        { model: Comment, include: [Restaurant] }
+        { model: Comment, include: [Restaurant] },
+        { model: Restaurant, as: 'FavoritedRestaurants' },
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' },
       ]
     })
-    return res.render('profile', { user: user.toJSON() })
+    user = user.toJSON()
+    const commtentsUndupRest = helpers.deleteDuplicated(user.Comments) //去除重複後的評論
+    return res.render('profile', { user, commtentsUndupRest })
   },
-  // POST to create
   putUser: (req, res) => {
     if (req.params.id == helpers.getUser(req).id) {
       if (!req.body.name) {
@@ -97,9 +101,6 @@ const userController = {
     }
   },
   addFavorite: (req, res) => {
-    // console.log("============addFavorite=========")
-    // console.log("req", req)
-    // console.log("helpers.getUser(req)", helpers.getUser(req))
     return Favorite.create({
       UserId: helpers.getUser(req).id,
       RestaurantId: req.params.restaurantId
@@ -109,9 +110,6 @@ const userController = {
       })
   },
   removeFavorite: (req, res) => {
-    // console.log("============removeFavorite=========")
-    // console.log("req", req)
-    // console.log("helpers.getUser(req)", helpers.getUser(req))
     return Favorite.destroy({
       where: {
         UserId: req.user.id,

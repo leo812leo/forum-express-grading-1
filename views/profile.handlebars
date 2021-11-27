@@ -12,7 +12,8 @@
         <div class="card-body-right">
           <h5 class="card-title">{{user.name}}</h5>
           <p class="card-text">{{user.email}}</p>
-          <p class="card-text">{{user.Comments.length}}已評論餐廳</p>
+          <p class="card-text">{{user.Comments.length}}
+            則評論，{{commtentsUndupRest.length}}已評論餐廳</p>
           <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
         </div>
       </div>
@@ -20,14 +21,65 @@
   </div>
   <div class="card my-5">
     <div class="card-header">
-      <p>{{user.Comments.length}} 已評論餐廳</p>
+      <p>{{commtentsUndupRest.length}}已評論餐廳</p>
     </div>
     <div class="container d-flex my-5">
-      {{#each user.Comments}}
+      {{#each commtentsUndupRest}}
         <a href="/restaurants/{{this.Restaurant.id}}">
           <img
             class="card-img mx-2"
             src="{{this.Restaurant.image}}"
+            style="width:80px;height:100%"
+          />
+        </a>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="card my-5">
+    <div class="card-header">
+      <p>{{user.FavoritedRestaurants.length}} 收藏餐廳</p>
+    </div>
+    <div class="container d-flex my-5">
+      {{#each user.FavoritedRestaurants}}
+        <a href="/restaurants/{{this.id}}">
+          <img
+            class="card-img mx-2"
+            src="{{this.image}}"
+            style="width:80px;height:100%"
+          />
+        </a>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="card my-5">
+    <div class="card-header">
+      <p>{{user.Followers.length}} followings(追蹤者)</p>
+    </div>
+    <div class="container d-flex my-5">
+      {{#each user.Followers}}
+        <a href="/users/{{this.id}}">
+          <img
+            class="card-img mx-2"
+            src="{{this.image}}"
+            style="width:80px;height:100%"
+          />
+        </a>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="card my-5">
+    <div class="card-header">
+      <p>{{user.Followings.length}} Followers(追隨者)</p>
+    </div>
+    <div class="container d-flex my-5">
+      {{#each user.Followings}}
+        <a href="/users/{{this.id}}">
+          <img
+            class="card-img mx-2"
+            src="{{this.image}}"
             style="width:80px;height:100%"
           />
         </a>

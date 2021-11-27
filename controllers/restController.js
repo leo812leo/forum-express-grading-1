@@ -1,9 +1,12 @@
-const { CommandCompleteMessage } = require('pg-protocol/dist/messages')
+/* DB */
 const db = require('../models')
-const { User, Restaurant, Comment, Favorite, Category } = db
-const pageLimit = 10
-const Sequelize = require('sequelize')
+const { User, Restaurant, Comment, Category } = db
+/* package */
 const helpers = require('../_helpers')
+/* input */
+const pageLimit = 10
+
+
 
 const restController = {
   getRestaurants: async (req, res) => {
