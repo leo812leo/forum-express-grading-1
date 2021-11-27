@@ -18,8 +18,22 @@ function deleteDuplicated(array) {
   return output
 }
 
+function randomDate(start, end, startHour, endHour) {
+  var date = new Date(+start + Math.random() * (end - start));
+  var hour = startHour + Math.random() * (endHour - startHour) | 0;
+  date.setHours(hour);
+  return date;
+}
+
+function randomChoose(array, n) {
+  return array.sort(() => .5 - Math.random()).slice(0, n);
+}
+
+
 module.exports = {
   deleteDuplicated,
   ensureAuthenticated,
   getUser,
+  randomDate,
+  randomChoose
 }
