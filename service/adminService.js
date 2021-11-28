@@ -1,4 +1,3 @@
-const adminService = require('../service/adminService.js')
 /* DB */
 const db = require('../models')
 const { User, Restaurant, Category } = db
@@ -9,10 +8,13 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 // fs
 const fs = require('fs')
 
-const adminController = {
-  getRestaurants: (req, res) => {
-    adminService.getRestaurants(req, res, (data) => {
-      return res.render('admin/restaurants', data)
+const adminService = {
+  getRestaurants: (req, res, callback) => {
+    return Restaurant.findAll({
+      include: [Category], raw: true,
+      nest: true
+    }).then(restaurants => {
+      callback({ restaurants })
     })
   },
   getRestaurant: (req, res) => {
@@ -160,4 +162,4 @@ const adminController = {
   }
 }
 
-module.exports = adminController
+module.exports = adminService
