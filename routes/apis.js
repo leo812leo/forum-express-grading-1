@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('../config/passport')
 
 const adminController = require('../controllers/api/adminController.js')
+const categoryController = require('../controllers/api/categoryController')
 /* package */
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
@@ -24,7 +25,9 @@ const authenticatedAdmin = (req, res, next) => {
 }
 
 router.get('/restaurants', adminController.getRestaurants)
-router.get('/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)       //read Restaurant   (R)
-router.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)       //read Restaurant   (R)
+router.get('/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
+
+router.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
+router.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
 
 module.exports = router
