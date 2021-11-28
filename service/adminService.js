@@ -32,14 +32,15 @@ const adminService = {
       return res.render('admin/create', { categories })
     })
   },
-  postRestaurant: (req, res) => {
+  postRestaurant: (req, res, callback) => {
     if (!req.body.name) {
-      req.flash('error_messages', "name didn't exist")
-      return res.redirect('back')
+      return callback({ status: 'error', message: "name didn't exist" })
     }
-    const { file } = req
+    const { file } = req // equal to const file = req.file
     if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID);
+      console.log('==========================')
+      console.log('adminService.postRestaurant')
+      imgur.setClientID(IMGUR_CLIENT_ID)
       imgur.upload(file.path, (err, img) => {
         return Restaurant.create({
           name: req.body.name,
@@ -49,26 +50,24 @@ const adminService = {
           description: req.body.description,
           image: file ? img.data.link : null,
           CategoryId: req.body.categoryId
-        })
-          .then((restaurant) => {
-            req.flash('success_messages', 'restaurant was successfully created')
-            res.redirect('/admin/restaurants')
-          })
+        }).then((restaurant) => {
+          callback({ status: 'success', message: 'restaurant was successfully created' })
+        }).catch(e => console.log(e))
       })
-    }
-    else {
+    } else {
+      console.log('==========================')
+      console.log('adminService.postRestaurant')
       return Restaurant.create({
         name: req.body.name,
         tel: req.body.tel,
         address: req.body.address,
         opening_hours: req.body.opening_hours,
         description: req.body.description,
-        image: null,
         CategoryId: req.body.categoryId
-      }).then((restaurant) => {
-        req.flash('success_messages', 'restaurant was successfully created')
-        return res.redirect('/admin/restaurants')
       })
+        .then((restaurant) => {
+          callback({ status: 'success', message: 'restaurant was successfully created' })
+        }).catch(e => console.log(e))
     }
   },
   editRestaurant: async (req, res) => {
@@ -126,12 +125,12 @@ const adminService = {
         })
     }
   },
-  deleteRestaurant: (req, res) => {
+  deleteRestaurant: (req, res, callback) => {
     return Restaurant.findByPk(req.params.id)
       .then((restaurant) => {
         restaurant.destroy()
           .then((restaurant) => {
-            res.redirect('/admin/restaurants')
+            callback({ status: 'success', message: '' })
           })
       })
   },

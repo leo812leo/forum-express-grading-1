@@ -32,7 +32,6 @@ async function pairsGenerate(num) {
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const data = await pairsGenerate(numOfPair)
-    console.log(data)
     await queryInterface.bulkInsert('Followships', data, {})
   },
   down: async (queryInterface, Sequelize) => {

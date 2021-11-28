@@ -26,8 +26,9 @@ const authenticatedAdmin = (req, res, next) => {
 
 router.get('/restaurants', adminController.getRestaurants)
 router.get('/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
-
+router.get('/admin/restaurants', authenticatedAdmin, adminController.getRestaurants)
 router.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
 router.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
-
+router.post('/admin/restaurants', upload.single('image'), adminController.postRestaurant)
+router.delete('/admin/restaurants/:id', adminController.deleteRestaurant)
 module.exports = router

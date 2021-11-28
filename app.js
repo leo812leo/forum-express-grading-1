@@ -1,6 +1,7 @@
 const express = require('express')
 const flash = require('connect-flash')
 const session = require('express-session')
+const bodyParser = require('body-parser')
 const passport = require('./config/passport')
 const app = express()
 const { engine } = require('express-handlebars')
@@ -14,6 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use(express.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
 app.use(methodOverride('_method'))
