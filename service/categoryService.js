@@ -36,11 +36,21 @@ let categoryController = {
       callback({ status: 'success', message: 'category was successfully update' })
     }
   },
-  deleteCategory: async (req, res) => {
-
-    const category = await Category.findByPk(req.params.id)
-    await category.destroy()
-    res.redirect('/admin/categories')
+  // deleteCategory: async (req, res, callback) => {
+  //   const category = await Category.findByPk(req.params.id)
+  //   console.log("=========================")
+  //   await category.destroy()
+  //   callback({ status: 'success', message: 'category was successfully delete' })
+  // },
+  deleteCategory: (req, res, callback) => {
+    return Category.findByPk(req.params.id)
+      .then((category) => {
+        console.log(category.toJSON())
+        category.destroy()
+          .then((cateogry) => {
+            callback({ status: 'success', message: '' })
+          }).catch(e => console.log(e))
+      })
   }
 }
 module.exports = categoryController

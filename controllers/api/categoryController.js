@@ -18,5 +18,10 @@ let categoryController = {
       return res.json(data)
     })
   },
+  deleteCategory: async (req, res) => {
+    categoryService.deleteCategory(req, res, (data) => {
+      return res.json(data)
+    })
+  }
 }
 module.exports = categoryController
