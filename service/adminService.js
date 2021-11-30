@@ -38,8 +38,6 @@ const adminService = {
     }
     const { file } = req // equal to const file = req.file
     if (file) {
-      console.log('==========================')
-      console.log('adminService.postRestaurant')
       imgur.setClientID(IMGUR_CLIENT_ID)
       imgur.upload(file.path, (err, img) => {
         return Restaurant.create({
@@ -55,8 +53,6 @@ const adminService = {
         }).catch(e => console.log(e))
       })
     } else {
-      console.log('==========================')
-      console.log('adminService.postRestaurant')
       return Restaurant.create({
         name: req.body.name,
         tel: req.body.tel,
@@ -81,10 +77,9 @@ const adminService = {
       restaurant: restaurant.toJSON()
     })
   },
-  putRestaurant: (req, res) => {
+  putRestaurant: (req, res, callback) => {
     if (!req.body.name) {
-      req.flash('error_messages', "name didn't exist")
-      return res.redirect('back')
+      callback({ status: 'error', message: "name didn't exist" })
     }
     const { file } = req
     if (file) {
@@ -102,8 +97,7 @@ const adminService = {
               CategoryId: req.body.categoryId
             })
               .then((restaurant) => {
-                req.flash('success_messages', 'restaurant was successfully to update')
-                res.redirect('/admin/restaurants')
+                callback({ status: 'success', message: 'restaurant was successfully update' })
               })
           })
       })
@@ -119,8 +113,7 @@ const adminService = {
             image: restaurant.image,
             CategoryId: req.body.categoryId
           }).then((restaurant) => {
-            req.flash('success_messages', 'restaurant was successfully to update')
-            res.redirect('/admin/restaurants')
+            callback({ status: 'success', message: 'restaurant was successfully to update' })
           })
         })
     }
