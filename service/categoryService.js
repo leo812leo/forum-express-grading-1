@@ -6,7 +6,13 @@ let categoryController = {
       raw: true,
       nest: true
     }).then(categories => {
-      callback({ categories })
+      if (req.params.id) {
+        Category.findByPk(req.params.id).then((category) => {
+          callback({ categories: categories, category: category.toJSON() })
+        })
+      } else {
+        callback({ categories })
+      }
     })
   },
   postCategory: (req, res, callback) => {
@@ -21,14 +27,13 @@ let categoryController = {
         })
     }
   },
-  putCategory: async (req, res) => {
+  putCategory: async (req, res, callback) => {
     if (!req.body.name) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
+      callback({ status: 'error', message: 'name didn\'t exist' })
     } else {
       const category = await Category.findByPk(req.params.id)
       await category.update(req.body)
-      res.redirect('/admin/categories')
+      callback({ status: 'success', message: 'category was successfully update' })
     }
   },
   deleteCategory: async (req, res) => {
