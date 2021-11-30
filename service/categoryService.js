@@ -9,16 +9,15 @@ let categoryController = {
       callback({ categories })
     })
   },
-  postCategory: (req, res) => {
+  postCategory: (req, res, callback) => {
     if (!req.body.name) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
+      callback({ status: 'error', message: 'name didn\'t exist' })
     } else {
       return Category.create({
         name: req.body.name
       })
         .then((category) => {
-          res.redirect('/admin/categories')
+          callback({ status: 'success', message: 'category was successfully create' })
         })
     }
   },
